@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   AlertTriangle,
   Plus,
@@ -9,10 +9,10 @@ import {
   FileText,
   Clock,
   ShieldAlert,
-  ChevronRight
-} from 'lucide-react';
-import { api } from '../services/api';
-import ClaimModal from '../components/ClaimModal';
+  ChevronRight,
+} from "lucide-react";
+import { api } from "../services/api";
+import ClaimModal from "../components/ClaimModal";
 
 export const ClaimsPage = () => {
   const [claims, setClaims] = useState([]);
@@ -23,8 +23,8 @@ export const ClaimsPage = () => {
   const [selectedClaim, setSelectedClaim] = useState(null);
 
   // Filters
-  const [statusFilter, setStatusFilter] = useState('ALL');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchClaims = async () => {
     setLoading(true);
@@ -49,7 +49,7 @@ export const ClaimsPage = () => {
 
   useEffect(() => {
     let result = [...claims];
-    if (statusFilter !== 'ALL') {
+    if (statusFilter !== "ALL") {
       result = result.filter((c) => c.status === statusFilter);
     }
     if (searchQuery.trim()) {
@@ -59,7 +59,7 @@ export const ClaimsPage = () => {
           c.claimNumber.toLowerCase().includes(q) ||
           c.cedentName.toLowerCase().includes(q) ||
           c.eventDescription.toLowerCase().includes(q) ||
-          c.treatyCode.toLowerCase().includes(q)
+          c.treatyCode.toLowerCase().includes(q),
       );
     }
     setFilteredClaims(result);
@@ -93,7 +93,8 @@ export const ClaimsPage = () => {
             <span>Reinsurance Claims & Ceded Loss Registry</span>
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Monitor first notices of loss (FNOL), ceded claim advices, reserve adequacy, and settlement disbursements.
+            Monitor first notices of loss (FNOL), ceded claim advices, reserve
+            adequacy, and settlement disbursements.
           </p>
         </div>
 
@@ -138,7 +139,9 @@ export const ClaimsPage = () => {
 
       {/* Claims Table and Drawer */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className={`bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden ${selectedClaim ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
+        <div
+          className={`bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden ${selectedClaim ? "lg:col-span-2" : "lg:col-span-3"}`}
+        >
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 text-slate-500 font-semibold uppercase tracking-wider border-b border-slate-200">
@@ -166,15 +169,25 @@ export const ClaimsPage = () => {
                       key={c.id}
                       onClick={() => setSelectedClaim(c)}
                       className={`hover:bg-rose-50/40 cursor-pointer transition ${
-                        selectedClaim?.id === c.id ? 'bg-rose-50/70 font-medium' : ''
+                        selectedClaim?.id === c.id
+                          ? "bg-rose-50/70 font-medium"
+                          : ""
                       }`}
                     >
                       <td className="py-3.5 px-4">
-                        <div className="font-bold text-slate-900">{c.claimNumber}</div>
-                        <div className="text-[11px] text-slate-500 truncate max-w-xs">{c.eventDescription}</div>
+                        <div className="font-bold text-slate-900">
+                          {c.claimNumber}
+                        </div>
+                        <div className="text-[11px] text-slate-500 truncate max-w-xs">
+                          {c.eventDescription}
+                        </div>
                       </td>
-                      <td className="py-3.5 px-4 font-semibold text-blue-700">{c.treatyCode}</td>
-                      <td className="py-3.5 px-4 font-medium text-slate-800">{c.cedentName}</td>
+                      <td className="py-3.5 px-4 font-semibold text-blue-700">
+                        {c.treatyCode}
+                      </td>
+                      <td className="py-3.5 px-4 font-medium text-slate-800">
+                        {c.cedentName}
+                      </td>
                       <td className="py-3.5 px-4 text-right font-medium text-slate-600">
                         ${(c.grossLossAmount / 1000000).toFixed(1)}M
                       </td>
@@ -187,16 +200,16 @@ export const ClaimsPage = () => {
                       <td className="py-3.5 px-4 text-center">
                         <span
                           className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
-                            c.status === 'SETTLED'
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : c.status === 'APPROVED'
-                              ? 'bg-blue-100 text-blue-800'
-                              : c.status === 'IN_REVIEW'
-                              ? 'bg-amber-100 text-amber-800'
-                              : 'bg-rose-100 text-rose-800'
+                            c.status === "SETTLED"
+                              ? "bg-emerald-100 text-emerald-800"
+                              : c.status === "APPROVED"
+                                ? "bg-blue-100 text-blue-800"
+                                : c.status === "IN_REVIEW"
+                                  ? "bg-amber-100 text-amber-800"
+                                  : "bg-rose-100 text-rose-800"
                           }`}
                         >
-                          {c.status.replace('_', ' ')}
+                          {c.status.replace("_", " ")}
                         </span>
                       </td>
                       <td className="py-3.5 px-4 text-center">
@@ -215,8 +228,12 @@ export const ClaimsPage = () => {
           <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div>
-                <span className="text-[10px] font-bold uppercase text-rose-600 tracking-wider">Claim File</span>
-                <h3 className="text-base font-bold text-slate-900">{selectedClaim.claimNumber}</h3>
+                <span className="text-[10px] font-bold uppercase text-rose-600 tracking-wider">
+                  Claim File
+                </span>
+                <h3 className="text-base font-bold text-slate-900">
+                  {selectedClaim.claimNumber}
+                </h3>
               </div>
               <button
                 onClick={() => setSelectedClaim(null)}
@@ -226,64 +243,102 @@ export const ClaimsPage = () => {
               </button>
             </div>
 
-            <p className="text-xs text-slate-700 font-medium">{selectedClaim.eventDescription}</p>
+            <p className="text-xs text-slate-700 font-medium">
+              {selectedClaim.eventDescription}
+            </p>
 
             <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3 rounded-xl border border-slate-200/80">
               <div>
-                <span className="text-slate-400 block text-[10px]">Ceding Company</span>
-                <span className="font-bold text-slate-800">{selectedClaim.cedentName}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Ceding Company
+                </span>
+                <span className="font-bold text-slate-800">
+                  {selectedClaim.cedentName}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Attached Treaty</span>
-                <span className="font-bold text-blue-700">{selectedClaim.treatyCode}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Attached Treaty
+                </span>
+                <span className="font-bold text-blue-700">
+                  {selectedClaim.treatyCode}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Total Ground-Up Loss</span>
-                <span className="font-bold text-slate-800">${selectedClaim.grossLossAmount?.toLocaleString()}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Total Ground-Up Loss
+                </span>
+                <span className="font-bold text-slate-800">
+                  ${selectedClaim.grossLossAmount?.toLocaleString()}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Ceded Reinsurance Loss</span>
-                <span className="font-bold text-rose-700">${selectedClaim.reinsuranceCededAmount?.toLocaleString()}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Ceded Reinsurance Loss
+                </span>
+                <span className="font-bold text-rose-700">
+                  ${selectedClaim.reinsuranceCededAmount?.toLocaleString()}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Paid Amount</span>
-                <span className="font-bold text-emerald-700">${selectedClaim.paidAmount?.toLocaleString()}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Paid Amount
+                </span>
+                <span className="font-bold text-emerald-700">
+                  ${selectedClaim.paidAmount?.toLocaleString()}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Outstanding Reserve</span>
-                <span className="font-bold text-amber-700">${selectedClaim.outstandingReserve?.toLocaleString()}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Outstanding Reserve
+                </span>
+                <span className="font-bold text-amber-700">
+                  ${selectedClaim.outstandingReserve?.toLocaleString()}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Loss Date</span>
-                <span className="font-medium text-slate-800">{selectedClaim.lossDate}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Loss Date
+                </span>
+                <span className="font-medium text-slate-800">
+                  {selectedClaim.lossDate}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Reported Date</span>
-                <span className="font-medium text-slate-800">{selectedClaim.reportedDate}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Reported Date
+                </span>
+                <span className="font-medium text-slate-800">
+                  {selectedClaim.reportedDate}
+                </span>
               </div>
             </div>
 
             <div>
-              <span className="text-xs font-semibold text-slate-700 block mb-1">Adjuster / Reserve Notes:</span>
+              <span className="text-xs font-semibold text-slate-700 block mb-1">
+                Adjuster / Reserve Notes:
+              </span>
               <p className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-200 italic">
-                "{selectedClaim.adjusterNotes || 'No adjuster notes recorded.'}"
+                "{selectedClaim.adjusterNotes || "No adjuster notes recorded."}"
               </p>
             </div>
 
             <div className="pt-3 border-t border-slate-100">
-              <span className="text-xs font-semibold text-slate-700 block mb-2">Claim Lifecycle State:</span>
+              <span className="text-xs font-semibold text-slate-700 block mb-2">
+                Claim Lifecycle State:
+              </span>
               <div className="flex flex-wrap gap-2">
-                {['REPORTED', 'IN_REVIEW', 'APPROVED', 'SETTLED'].map((st) => (
+                {["REPORTED", "IN_REVIEW", "APPROVED", "SETTLED"].map((st) => (
                   <button
                     key={st}
                     onClick={() => handleStatusChange(selectedClaim.id, st)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                       selectedClaim.status === st
-                        ? 'bg-rose-600 text-white shadow-sm'
-                        : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                        ? "bg-rose-600 text-white shadow-sm"
+                        : "bg-slate-100 hover:bg-slate-200 text-slate-700"
                     }`}
                   >
-                    {st.replace('_', ' ')}
+                    {st.replace("_", " ")}
                   </button>
                 ))}
               </div>

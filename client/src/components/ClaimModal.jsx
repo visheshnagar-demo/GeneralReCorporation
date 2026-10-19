@@ -1,27 +1,27 @@
-import { useState } from 'react';
-import { X, AlertCircle } from 'lucide-react';
+import { useState } from "react";
+import { X, AlertCircle } from "lucide-react";
 
 export const ClaimModal = ({ isOpen, onClose, onSave, treaties = [] }) => {
   const [formData, setFormData] = useState({
-    treatyCode: treaties[0]?.treatyCode || 'TRT-2026-NA-01',
-    cedentName: treaties[0]?.cedentName || 'Travelers Indemnity Corp',
-    eventDescription: '',
-    lossDate: new Date().toISOString().split('T')[0],
-    grossLossAmount: '',
-    reinsuranceCededAmount: '',
-    paidAmount: '0',
-    outstandingReserve: '',
-    catEventCode: '',
-    adjusterNotes: '',
+    treatyCode: treaties[0]?.treatyCode || "TRT-2026-NA-01",
+    cedentName: treaties[0]?.cedentName || "Travelers Indemnity Corp",
+    eventDescription: "",
+    lossDate: new Date().toISOString().split("T")[0],
+    grossLossAmount: "",
+    reinsuranceCededAmount: "",
+    paidAmount: "0",
+    outstandingReserve: "",
+    catEventCode: "",
+    adjusterNotes: "",
   });
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'treatyCode') {
+    if (name === "treatyCode") {
       const selected = treaties.find((t) => t.treatyCode === value);
       setFormData((prev) => ({
         ...prev,
@@ -36,21 +36,29 @@ export const ClaimModal = ({ isOpen, onClose, onSave, treaties = [] }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.eventDescription.trim()) {
-      setError('Please provide a loss event description');
+      setError("Please provide a loss event description");
       return;
     }
-    if (!formData.grossLossAmount || parseFloat(formData.grossLossAmount) <= 0) {
-      setError('Please enter a valid Gross Loss amount');
+    if (
+      !formData.grossLossAmount ||
+      parseFloat(formData.grossLossAmount) <= 0
+    ) {
+      setError("Please enter a valid Gross Loss amount");
       return;
     }
-    if (!formData.reinsuranceCededAmount || parseFloat(formData.reinsuranceCededAmount) <= 0) {
-      setError('Please enter a valid Ceded Loss amount');
+    if (
+      !formData.reinsuranceCededAmount ||
+      parseFloat(formData.reinsuranceCededAmount) <= 0
+    ) {
+      setError("Please enter a valid Ceded Loss amount");
       return;
     }
 
     const ceded = parseFloat(formData.reinsuranceCededAmount) || 0;
     const paid = parseFloat(formData.paidAmount) || 0;
-    const reserve = formData.outstandingReserve ? parseFloat(formData.outstandingReserve) : Math.max(0, ceded - paid);
+    const reserve = formData.outstandingReserve
+      ? parseFloat(formData.outstandingReserve)
+      : Math.max(0, ceded - paid);
 
     onSave({
       ...formData,
@@ -58,7 +66,7 @@ export const ClaimModal = ({ isOpen, onClose, onSave, treaties = [] }) => {
       reinsuranceCededAmount: ceded,
       paidAmount: paid,
       outstandingReserve: reserve,
-      status: 'REPORTED',
+      status: "REPORTED",
     });
     onClose();
   };
@@ -72,8 +80,12 @@ export const ClaimModal = ({ isOpen, onClose, onSave, treaties = [] }) => {
               <AlertCircle className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900">First Notice of Loss / Claim Ingestion</h3>
-              <p className="text-xs text-slate-500">Record ceded loss advice from primary ceding insurance partner</p>
+              <h3 className="text-lg font-bold text-slate-900">
+                First Notice of Loss / Claim Ingestion
+              </h3>
+              <p className="text-xs text-slate-500">
+                Record ceded loss advice from primary ceding insurance partner
+              </p>
             </div>
           </div>
           <button
@@ -93,7 +105,9 @@ export const ClaimModal = ({ isOpen, onClose, onSave, treaties = [] }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Attached Treaty</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Attached Treaty
+              </label>
               <select
                 name="treatyCode"
                 value={formData.treatyCode}
@@ -109,7 +123,9 @@ export const ClaimModal = ({ isOpen, onClose, onSave, treaties = [] }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Ceding Insurer</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Ceding Insurer
+              </label>
               <input
                 type="text"
                 name="cedentName"
@@ -121,7 +137,9 @@ export const ClaimModal = ({ isOpen, onClose, onSave, treaties = [] }) => {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Loss Event Description *</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Loss Event Description *
+              </label>
               <input
                 type="text"
                 name="eventDescription"
@@ -134,7 +152,9 @@ export const ClaimModal = ({ isOpen, onClose, onSave, treaties = [] }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Date of Loss</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Date of Loss
+              </label>
               <input
                 type="date"
                 name="lossDate"
@@ -145,7 +165,9 @@ export const ClaimModal = ({ isOpen, onClose, onSave, treaties = [] }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">CAT Event Reference (Optional)</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                CAT Event Reference (Optional)
+              </label>
               <input
                 type="text"
                 name="catEventCode"
@@ -157,7 +179,9 @@ export const ClaimModal = ({ isOpen, onClose, onSave, treaties = [] }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Total Ground-Up Loss ($) *</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Total Ground-Up Loss ($) *
+              </label>
               <input
                 type="number"
                 name="grossLossAmount"
@@ -170,7 +194,9 @@ export const ClaimModal = ({ isOpen, onClose, onSave, treaties = [] }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Ceded Reinsurance Loss ($) *</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Ceded Reinsurance Loss ($) *
+              </label>
               <input
                 type="number"
                 name="reinsuranceCededAmount"
@@ -183,7 +209,9 @@ export const ClaimModal = ({ isOpen, onClose, onSave, treaties = [] }) => {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Loss Adjuster Initial Notes</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Loss Adjuster Initial Notes
+              </label>
               <textarea
                 name="adjusterNotes"
                 value={formData.adjusterNotes}

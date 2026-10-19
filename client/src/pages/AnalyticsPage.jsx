@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   BarChart3,
   TrendingUp,
@@ -6,10 +6,10 @@ import {
   ShieldCheck,
   DollarSign,
   Layers,
-  ArrowUpRight
-} from 'lucide-react';
-import { api } from '../services/api';
-import MetricCard from '../components/MetricCard';
+  ArrowUpRight,
+} from "lucide-react";
+import { api } from "../services/api";
+import MetricCard from "../components/MetricCard";
 
 export const AnalyticsPage = () => {
   const [analytics, setAnalytics] = useState(null);
@@ -35,7 +35,8 @@ export const AnalyticsPage = () => {
           <span>Portfolio Profitability & Actuarial Analytics</span>
         </h1>
         <p className="text-xs text-slate-500 mt-1">
-          Detailed metrics on Gross Written Premium, technical loss ratios, expense allocations, and Solvency II capital adequacy.
+          Detailed metrics on Gross Written Premium, technical loss ratios,
+          expense allocations, and Solvency II capital adequacy.
         </p>
       </div>
 
@@ -43,36 +44,44 @@ export const AnalyticsPage = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title="Net Earned Premium (NEP)"
-          value={analytics ? `$${(analytics.netEarnedPremium / 1000000000).toFixed(2)}B` : '$12.85B'}
+          value={
+            analytics
+              ? `$${(analytics.netEarnedPremium / 1000000000).toFixed(2)}B`
+              : "$12.85B"
+          }
           subtitle="90.5% Retention Ratio"
-          trend={{ value: '+7.2% YoY', isPositive: true }}
+          trend={{ value: "+7.2% YoY", isPositive: true }}
           icon={DollarSign}
           color="blue"
         />
 
         <MetricCard
           title="Consolidated Loss Ratio"
-          value={analytics ? `${analytics.lossRatio}%` : '58.2%'}
+          value={analytics ? `${analytics.lossRatio}%` : "58.2%"}
           subtitle="Catastrophe load: 8.4%"
-          trend={{ value: 'Target <60%', isPositive: true }}
+          trend={{ value: "Target <60%", isPositive: true }}
           icon={TrendingUp}
           color="emerald"
         />
 
         <MetricCard
           title="Expense Ratio"
-          value={analytics ? `${analytics.expenseRatio}%` : '31.2%'}
+          value={analytics ? `${analytics.expenseRatio}%` : "31.2%"}
           subtitle="Brokerage & Admin"
-          trend={{ value: 'Stable', isPositive: true }}
+          trend={{ value: "Stable", isPositive: true }}
           icon={Layers}
           color="indigo"
         />
 
         <MetricCard
           title="Total Capital Surplus"
-          value={analytics ? `$${(analytics.capitalSurplus / 1000000000).toFixed(1)}B` : '$18.9B'}
+          value={
+            analytics
+              ? `$${(analytics.capitalSurplus / 1000000000).toFixed(1)}B`
+              : "$18.9B"
+          }
           subtitle="Berkshire Hathaway backing"
-          trend={{ value: 'AAA Depth', isPositive: true }}
+          trend={{ value: "AAA Depth", isPositive: true }}
           icon={ShieldCheck}
           color="amber"
         />
@@ -99,11 +108,16 @@ export const AnalyticsPage = () => {
             <tbody className="divide-y divide-slate-100 text-slate-700">
               {analytics?.lineOfBusinessBreakdown.map((item) => (
                 <tr key={item.line} className="hover:bg-slate-50 transition">
-                  <td className="py-3.5 px-4 font-bold text-slate-900">{item.line}</td>
+                  <td className="py-3.5 px-4 font-bold text-slate-900">
+                    {item.line}
+                  </td>
                   <td className="py-3.5 px-4 font-medium text-slate-600">
                     <div className="flex items-center space-x-2">
                       <div className="w-24 bg-slate-100 h-2 rounded-full overflow-hidden">
-                        <div className="bg-blue-600 h-full rounded-full" style={{ width: `${item.percentage}%` }} />
+                        <div
+                          className="bg-blue-600 h-full rounded-full"
+                          style={{ width: `${item.percentage}%` }}
+                        />
                       </div>
                       <span>{item.percentage}%</span>
                     </div>

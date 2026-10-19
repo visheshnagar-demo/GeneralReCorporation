@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   FileCheck2,
   Plus,
@@ -12,10 +12,10 @@ import {
   ChevronRight,
   Shield,
   Layers,
-  ArrowUpDown
-} from 'lucide-react';
-import { api } from '../services/api';
-import TreatyModal from '../components/TreatyModal';
+  ArrowUpDown,
+} from "lucide-react";
+import { api } from "../services/api";
+import TreatyModal from "../components/TreatyModal";
 
 export const TreatiesPage = () => {
   const [treaties, setTreaties] = useState([]);
@@ -25,9 +25,9 @@ export const TreatiesPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   // Filters
-  const [statusFilter, setStatusFilter] = useState('ALL');
-  const [lobFilter, setLobFilter] = useState('ALL');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [lobFilter, setLobFilter] = useState("ALL");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchTreaties = async () => {
     setLoading(true);
@@ -48,10 +48,10 @@ export const TreatiesPage = () => {
 
   useEffect(() => {
     let result = [...treaties];
-    if (statusFilter !== 'ALL') {
+    if (statusFilter !== "ALL") {
       result = result.filter((t) => t.status === statusFilter);
     }
-    if (lobFilter !== 'ALL') {
+    if (lobFilter !== "ALL") {
       result = result.filter((t) => t.lineOfBusiness === lobFilter);
     }
     if (searchQuery.trim()) {
@@ -61,7 +61,7 @@ export const TreatiesPage = () => {
           t.treatyName.toLowerCase().includes(q) ||
           t.treatyCode.toLowerCase().includes(q) ||
           t.cedentName.toLowerCase().includes(q) ||
-          t.underwriter.toLowerCase().includes(q)
+          t.underwriter.toLowerCase().includes(q),
       );
     }
     setFilteredTreaties(result);
@@ -95,7 +95,8 @@ export const TreatiesPage = () => {
             <span>Reinsurance Treaties & Facultative Portfolio</span>
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Manage quota share, excess of loss layers, surplus commitments, and facultative endorsements.
+            Manage quota share, excess of loss layers, surplus commitments, and
+            facultative endorsements.
           </p>
         </div>
 
@@ -158,7 +159,9 @@ export const TreatiesPage = () => {
 
       {/* Main Content Area: Table and Detail Drawer */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className={`bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden ${selectedTreaty ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
+        <div
+          className={`bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden ${selectedTreaty ? "lg:col-span-2" : "lg:col-span-3"}`}
+        >
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 text-slate-500 font-semibold uppercase tracking-wider border-b border-slate-200">
@@ -186,20 +189,34 @@ export const TreatiesPage = () => {
                       key={t.id}
                       onClick={() => setSelectedTreaty(t)}
                       className={`hover:bg-blue-50/50 cursor-pointer transition ${
-                        selectedTreaty?.id === t.id ? 'bg-blue-50/80 font-medium' : ''
+                        selectedTreaty?.id === t.id
+                          ? "bg-blue-50/80 font-medium"
+                          : ""
                       }`}
                     >
                       <td className="py-3.5 px-4">
-                        <div className="font-bold text-slate-900">{t.treatyCode}</div>
-                        <div className="text-[11px] text-slate-500 truncate max-w-xs">{t.treatyName}</div>
+                        <div className="font-bold text-slate-900">
+                          {t.treatyCode}
+                        </div>
+                        <div className="text-[11px] text-slate-500 truncate max-w-xs">
+                          {t.treatyName}
+                        </div>
                       </td>
                       <td className="py-3.5 px-4">
-                        <div className="font-semibold text-slate-800">{t.cedentName}</div>
-                        <div className="text-[10px] text-slate-400">{t.brokerName || 'Direct'}</div>
+                        <div className="font-semibold text-slate-800">
+                          {t.cedentName}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {t.brokerName || "Direct"}
+                        </div>
                       </td>
                       <td className="py-3.5 px-4">
-                        <div className="text-slate-800 font-medium">{t.lineOfBusiness.replace('_', ' ')}</div>
-                        <span className="text-[10px] text-slate-500">{t.treatyType.replace('_', ' ')}</span>
+                        <div className="text-slate-800 font-medium">
+                          {t.lineOfBusiness.replace("_", " ")}
+                        </div>
+                        <span className="text-[10px] text-slate-500">
+                          {t.treatyType.replace("_", " ")}
+                        </span>
                       </td>
                       <td className="py-3.5 px-4 text-right font-bold text-slate-900">
                         ${(t.limit / 1000000).toFixed(1)}M
@@ -213,21 +230,21 @@ export const TreatiesPage = () => {
                         ${(t.grossPremium / 1000000).toFixed(2)}M
                       </td>
                       <td className="py-3.5 px-4 text-center font-bold text-slate-800">
-                        {t.combinedRatio ? `${t.combinedRatio}%` : 'N/A'}
+                        {t.combinedRatio ? `${t.combinedRatio}%` : "N/A"}
                       </td>
                       <td className="py-3.5 px-4 text-center">
                         <span
                           className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
-                            t.status === 'BOUND'
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : t.status === 'APPROVED'
-                              ? 'bg-blue-100 text-blue-800'
-                              : t.status === 'UNDER_REVIEW'
-                              ? 'bg-amber-100 text-amber-800'
-                              : 'bg-slate-100 text-slate-700'
+                            t.status === "BOUND"
+                              ? "bg-emerald-100 text-emerald-800"
+                              : t.status === "APPROVED"
+                                ? "bg-blue-100 text-blue-800"
+                                : t.status === "UNDER_REVIEW"
+                                  ? "bg-amber-100 text-amber-800"
+                                  : "bg-slate-100 text-slate-700"
                           }`}
                         >
-                          {t.status.replace('_', ' ')}
+                          {t.status.replace("_", " ")}
                         </span>
                       </td>
                       <td className="py-3.5 px-4 text-center">
@@ -246,8 +263,12 @@ export const TreatiesPage = () => {
           <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div>
-                <span className="text-[10px] font-bold uppercase text-blue-600 tracking-wider">Treaty Overview</span>
-                <h3 className="text-base font-bold text-slate-900">{selectedTreaty.treatyCode}</h3>
+                <span className="text-[10px] font-bold uppercase text-blue-600 tracking-wider">
+                  Treaty Overview
+                </span>
+                <h3 className="text-base font-bold text-slate-900">
+                  {selectedTreaty.treatyCode}
+                </h3>
               </div>
               <button
                 onClick={() => setSelectedTreaty(null)}
@@ -257,47 +278,84 @@ export const TreatiesPage = () => {
               </button>
             </div>
 
-            <p className="text-xs text-slate-700 font-medium">{selectedTreaty.treatyName}</p>
+            <p className="text-xs text-slate-700 font-medium">
+              {selectedTreaty.treatyName}
+            </p>
 
             <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3 rounded-xl border border-slate-200/80">
               <div>
-                <span className="text-slate-400 block text-[10px]">Ceding Partner</span>
-                <span className="font-bold text-slate-800">{selectedTreaty.cedentName}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Ceding Partner
+                </span>
+                <span className="font-bold text-slate-800">
+                  {selectedTreaty.cedentName}
+                </span>
               </div>
               <div>
                 <span className="text-slate-400 block text-[10px]">Broker</span>
-                <span className="font-bold text-slate-800">{selectedTreaty.brokerName || 'Direct Placement'}</span>
+                <span className="font-bold text-slate-800">
+                  {selectedTreaty.brokerName || "Direct Placement"}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Treaty Capacity / Limit</span>
-                <span className="font-bold text-blue-700">${selectedTreaty.limit?.toLocaleString()}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Treaty Capacity / Limit
+                </span>
+                <span className="font-bold text-blue-700">
+                  ${selectedTreaty.limit?.toLocaleString()}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Attachment / Deductible</span>
-                <span className="font-bold text-slate-800">${selectedTreaty.attachmentPoint?.toLocaleString()}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Attachment / Deductible
+                </span>
+                <span className="font-bold text-slate-800">
+                  ${selectedTreaty.attachmentPoint?.toLocaleString()}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Gross Premium</span>
-                <span className="font-bold text-emerald-700">${selectedTreaty.grossPremium?.toLocaleString()}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Gross Premium
+                </span>
+                <span className="font-bold text-emerald-700">
+                  ${selectedTreaty.grossPremium?.toLocaleString()}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Combined Ratio</span>
-                <span className="font-bold text-slate-800">{selectedTreaty.combinedRatio}%</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Combined Ratio
+                </span>
+                <span className="font-bold text-slate-800">
+                  {selectedTreaty.combinedRatio}%
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Inception Date</span>
-                <span className="font-medium text-slate-800">{selectedTreaty.inceptionDate}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Inception Date
+                </span>
+                <span className="font-medium text-slate-800">
+                  {selectedTreaty.inceptionDate}
+                </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Expiry Date</span>
-                <span className="font-medium text-slate-800">{selectedTreaty.expiryDate}</span>
+                <span className="text-slate-400 block text-[10px]">
+                  Expiry Date
+                </span>
+                <span className="font-medium text-slate-800">
+                  {selectedTreaty.expiryDate}
+                </span>
               </div>
             </div>
 
             <div>
-              <span className="text-xs font-semibold text-slate-700 block mb-1">Underwriter Assessment:</span>
+              <span className="text-xs font-semibold text-slate-700 block mb-1">
+                Underwriter Assessment:
+              </span>
               <p className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-200 italic">
-                "{selectedTreaty.underwriterNotes || 'No specific underwriting notes entered.'}"
+                "
+                {selectedTreaty.underwriterNotes ||
+                  "No specific underwriting notes entered."}
+                "
               </p>
               <span className="text-[10px] text-slate-400 block mt-1 font-medium">
                 Lead Actuary / UW: {selectedTreaty.underwriter}
@@ -305,19 +363,21 @@ export const TreatiesPage = () => {
             </div>
 
             <div className="pt-3 border-t border-slate-100">
-              <span className="text-xs font-semibold text-slate-700 block mb-2">Underwriting Status Workflow:</span>
+              <span className="text-xs font-semibold text-slate-700 block mb-2">
+                Underwriting Status Workflow:
+              </span>
               <div className="flex flex-wrap gap-2">
-                {['DRAFT', 'UNDER_REVIEW', 'APPROVED', 'BOUND'].map((st) => (
+                {["DRAFT", "UNDER_REVIEW", "APPROVED", "BOUND"].map((st) => (
                   <button
                     key={st}
                     onClick={() => handleStatusChange(selectedTreaty.id, st)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                       selectedTreaty.status === st
-                        ? 'bg-blue-600 text-white shadow-sm'
-                        : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                        ? "bg-blue-600 text-white shadow-sm"
+                        : "bg-slate-100 hover:bg-slate-200 text-slate-700"
                     }`}
                   >
-                    {st.replace('_', ' ')}
+                    {st.replace("_", " ")}
                   </button>
                 ))}
               </div>

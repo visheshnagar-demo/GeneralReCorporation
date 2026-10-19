@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
   FileCheck2,
@@ -8,17 +8,17 @@ import {
   Building2,
   BarChart3,
   HelpCircle,
-  FileText
-} from 'lucide-react';
+  FileText,
+} from "lucide-react";
 
 const navigation = [
-  { name: 'Executive Overview', href: '/', icon: LayoutDashboard },
-  { name: 'Treaties & Facultative', href: '/treaties', icon: FileCheck2 },
-  { name: 'Underwriting Workbench', href: '/underwriting', icon: Calculator },
-  { name: 'Claims & Ceded Losses', href: '/claims', icon: AlertTriangle },
-  { name: 'Catastrophe Accumulation', href: '/cat-exposure', icon: Flame },
-  { name: 'Cedents & Brokers', href: '/cedents', icon: Building2 },
-  { name: 'Portfolio Analytics', href: '/analytics', icon: BarChart3 },
+  { name: "Executive Overview", href: "/", icon: LayoutDashboard },
+  { name: "Treaties & Facultative", href: "/treaties", icon: FileCheck2 },
+  { name: "Underwriting Workbench", href: "/underwriting", icon: Calculator },
+  { name: "Claims & Ceded Losses", href: "/claims", icon: AlertTriangle },
+  { name: "Catastrophe Accumulation", href: "/cat-exposure", icon: Flame },
+  { name: "Cedents & Brokers", href: "/cedents", icon: Building2 },
+  { name: "Portfolio Analytics", href: "/analytics", icon: BarChart3 },
 ];
 
 export const Sidebar = () => {
@@ -38,8 +38,8 @@ export const Sidebar = () => {
                 className={({ isActive }) =>
                   `flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/20'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                      ? "bg-blue-600 text-white shadow-sm shadow-blue-500/20"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800"
                   }`
                 }
               >
@@ -55,10 +55,13 @@ export const Sidebar = () => {
         <div className="bg-slate-800/60 rounded-xl p-3 border border-slate-700/60">
           <div className="flex items-center space-x-2 text-blue-400 mb-1">
             <FileText className="w-4 h-4" />
-            <span className="text-xs font-semibold text-slate-200">Treaty Guidelines 2026</span>
+            <span className="text-xs font-semibold text-slate-200">
+              Treaty Guidelines 2026
+            </span>
           </div>
           <p className="text-xs text-slate-400 mb-2">
-            Refer to Gen Re global property/casualty guidelines and ESG exclusion mandates.
+            Refer to Gen Re global property/casualty guidelines and ESG
+            exclusion mandates.
           </p>
           <a
             href="#guidelines"

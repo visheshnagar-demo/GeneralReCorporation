@@ -1,24 +1,24 @@
-import { useState } from 'react';
-import { X, ShieldCheck, DollarSign, Building } from 'lucide-react';
+import { useState } from "react";
+import { X, ShieldCheck, DollarSign, Building } from "lucide-react";
 
 export const TreatyModal = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    treatyName: '',
-    treatyType: 'EXCESS_OF_LOSS',
-    lineOfBusiness: 'PROPERTY',
-    cedentName: '',
-    brokerName: '',
-    attachmentPoint: '',
-    limit: '',
-    grossPremium: '',
-    inceptionDate: '2026-01-01',
-    expiryDate: '2026-12-31',
-    underwriter: 'Eleanor Vance, FCAS',
-    underwriterNotes: '',
-    currency: 'USD',
+    treatyName: "",
+    treatyType: "EXCESS_OF_LOSS",
+    lineOfBusiness: "PROPERTY",
+    cedentName: "",
+    brokerName: "",
+    attachmentPoint: "",
+    limit: "",
+    grossPremium: "",
+    inceptionDate: "2026-01-01",
+    expiryDate: "2026-12-31",
+    underwriter: "Eleanor Vance, FCAS",
+    underwriterNotes: "",
+    currency: "USD",
   });
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   if (!isOpen) return null;
 
@@ -30,15 +30,15 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.treatyName.trim()) {
-      setError('Please provide a Treaty or Policy name');
+      setError("Please provide a Treaty or Policy name");
       return;
     }
     if (!formData.cedentName.trim()) {
-      setError('Please specify the Ceding Company (Cedent)');
+      setError("Please specify the Ceding Company (Cedent)");
       return;
     }
     if (!formData.limit || parseFloat(formData.limit) <= 0) {
-      setError('Please provide a valid policy limit');
+      setError("Please provide a valid policy limit");
       return;
     }
 
@@ -47,7 +47,7 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
       attachmentPoint: parseFloat(formData.attachmentPoint) || 0,
       limit: parseFloat(formData.limit) || 0,
       grossPremium: parseFloat(formData.grossPremium) || 0,
-      status: 'UNDER_REVIEW',
+      status: "UNDER_REVIEW",
       lossRatio: 0.0,
       combinedRatio: 78.5,
     });
@@ -63,8 +63,13 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900">New Reinsurance Treaty / Facultative</h3>
-              <p className="text-xs text-slate-500">Draft and submit reinsurance treaty structure for underwriting approval</p>
+              <h3 className="text-lg font-bold text-slate-900">
+                New Reinsurance Treaty / Facultative
+              </h3>
+              <p className="text-xs text-slate-500">
+                Draft and submit reinsurance treaty structure for underwriting
+                approval
+              </p>
             </div>
           </div>
           <button
@@ -84,7 +89,9 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Treaty / Policy Name *</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Treaty / Policy Name *
+              </label>
               <input
                 type="text"
                 name="treatyName"
@@ -97,7 +104,9 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Structure Type</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Structure Type
+              </label>
               <select
                 name="treatyType"
                 value={formData.treatyType}
@@ -113,7 +122,9 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Line of Business</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Line of Business
+              </label>
               <select
                 name="lineOfBusiness"
                 value={formData.lineOfBusiness}
@@ -129,7 +140,9 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Ceding Insurer (Cedent) *</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Ceding Insurer (Cedent) *
+              </label>
               <input
                 type="text"
                 name="cedentName"
@@ -142,7 +155,9 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Reinsurance Broker</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Reinsurance Broker
+              </label>
               <input
                 type="text"
                 name="brokerName"
@@ -154,7 +169,9 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Attachment Point ($)</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Attachment Point ($)
+              </label>
               <input
                 type="number"
                 name="attachmentPoint"
@@ -166,7 +183,9 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Treaty Limit ($) *</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Treaty Limit ($) *
+              </label>
               <input
                 type="number"
                 name="limit"
@@ -179,7 +198,9 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Gross Premium / Est. Premium ($)</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Gross Premium / Est. Premium ($)
+              </label>
               <input
                 type="number"
                 name="grossPremium"
@@ -191,7 +212,9 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Inception Date</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Inception Date
+              </label>
               <input
                 type="date"
                 name="inceptionDate"
@@ -202,7 +225,9 @@ export const TreatyModal = ({ isOpen, onClose, onSave }) => {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Underwriter Notes & Technical Terms</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Underwriter Notes & Technical Terms
+              </label>
               <textarea
                 name="underwriterNotes"
                 value={formData.underwriterNotes}

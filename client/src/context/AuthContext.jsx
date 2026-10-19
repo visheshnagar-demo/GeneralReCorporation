@@ -1,22 +1,23 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { api } from '../services/api';
+import { createContext, useContext, useState, useEffect } from "react";
+import { api } from "../services/api";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({
-    id: 'usr-1',
-    email: 'test@example.com',
-    name: 'Eleanor Vance, FCAS (Chief Underwriter)',
-    role: 'CHIEF_UNDERWRITER',
+    id: "usr-1",
+    email: "test@example.com",
+    name: "Eleanor Vance, FCAS (Chief Underwriter)",
+    role: "CHIEF_UNDERWRITER",
   });
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('genre_auth_token');
+    const token = localStorage.getItem("genre_auth_token");
     if (token) {
-      api.getCurrentUser()
+      api
+        .getCurrentUser()
         .then((userData) => {
           setUser(userData);
           setIsAuthenticated(true);
@@ -41,13 +42,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('genre_auth_token');
+    localStorage.removeItem("genre_auth_token");
     setIsAuthenticated(false);
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout, loading }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, login, logout, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -56,7 +59,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

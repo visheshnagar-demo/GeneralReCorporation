@@ -1,5 +1,12 @@
-import { Shield, Bell, LogOut, User, Activity, ExternalLink } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import {
+  Shield,
+  Bell,
+  LogOut,
+  User,
+  Activity,
+  ExternalLink,
+} from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 export const Navbar = () => {
   const { user, logout } = useAuth();
@@ -15,7 +22,9 @@ export const Navbar = () => {
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <span className="text-xl font-bold tracking-tight text-white">Gen Re</span>
+                <span className="text-xl font-bold tracking-tight text-white">
+                  Gen Re
+                </span>
                 <span className="text-xs bg-blue-900/60 text-blue-300 font-medium px-2 py-0.5 rounded border border-blue-700/50">
                   A Berkshire Hathaway Company
                 </span>
@@ -45,8 +54,12 @@ export const Navbar = () => {
             {user && (
               <div className="flex items-center space-x-3 pl-3 border-l border-slate-800">
                 <div className="hidden lg:block text-right">
-                  <p className="text-sm font-semibold text-slate-100">{user.name}</p>
-                  <p className="text-xs text-slate-400">{user.role || 'Underwriter'}</p>
+                  <p className="text-sm font-semibold text-slate-100">
+                    {user.name}
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    {user.role || "Underwriter"}
+                  </p>
                 </div>
                 <div className="w-9 h-9 rounded-full bg-blue-600/30 border border-blue-400/40 text-blue-300 flex items-center justify-center font-bold text-sm">
                   <User className="w-4 h-4" />

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   DollarSign,
   ShieldCheck,
@@ -11,14 +11,14 @@ import {
   Building2,
   FileCheck2,
   CheckCircle2,
-  Clock
-} from 'lucide-react';
-import { api } from '../services/api';
-import MetricCard from '../components/MetricCard';
-import TreatyModal from '../components/TreatyModal';
-import ClaimModal from '../components/ClaimModal';
-import PricingCalculatorModal from '../components/PricingCalculatorModal';
-import { Link } from 'react-router-dom';
+  Clock,
+} from "lucide-react";
+import { api } from "../services/api";
+import MetricCard from "../components/MetricCard";
+import TreatyModal from "../components/TreatyModal";
+import ClaimModal from "../components/ClaimModal";
+import PricingCalculatorModal from "../components/PricingCalculatorModal";
+import { Link } from "react-router-dom";
 
 export const DashboardPage = () => {
   const [analytics, setAnalytics] = useState(null);
@@ -69,11 +69,16 @@ export const DashboardPage = () => {
           <div className="flex items-center space-x-2 text-xs font-semibold text-blue-400 mb-1 tracking-wide uppercase">
             <span>Berkshire Hathaway Reinsurance Division</span>
             <span>&bull;</span>
-            <span className="text-emerald-400">Capital Adequacy: AAA Quality</span>
+            <span className="text-emerald-400">
+              Capital Adequacy: AAA Quality
+            </span>
           </div>
-          <h1 className="text-2xl font-black tracking-tight text-white">General Reinsurance Executive Operations</h1>
+          <h1 className="text-2xl font-black tracking-tight text-white">
+            General Reinsurance Executive Operations
+          </h1>
           <p className="text-xs text-slate-300 mt-1 max-w-xl">
-            Real-time underwriting portfolio health, catastrophe peril accumulation, and global treaty commitments.
+            Real-time underwriting portfolio health, catastrophe peril
+            accumulation, and global treaty commitments.
           </p>
         </div>
 
@@ -108,36 +113,44 @@ export const DashboardPage = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title="Gross Written Premium"
-          value={analytics ? `$${(analytics.grossWrittenPremium / 1000000000).toFixed(2)}B` : '$14.20B'}
+          value={
+            analytics
+              ? `$${(analytics.grossWrittenPremium / 1000000000).toFixed(2)}B`
+              : "$14.20B"
+          }
           subtitle="Net Earned Premium: $12.85B"
-          trend={{ value: '+8.4% YoY', isPositive: true }}
+          trend={{ value: "+8.4% YoY", isPositive: true }}
           icon={DollarSign}
           color="blue"
         />
 
         <MetricCard
           title="Combined Ratio"
-          value={analytics ? `${analytics.combinedRatio}%` : '89.4%'}
+          value={analytics ? `${analytics.combinedRatio}%` : "89.4%"}
           subtitle={`Loss Ratio: ${analytics?.lossRatio || 58.2}% | Exp: ${analytics?.expenseRatio || 31.2}%`}
-          trend={{ value: '-2.1% Impv', isPositive: true }}
+          trend={{ value: "-2.1% Impv", isPositive: true }}
           icon={TrendingUp}
           color="emerald"
         />
 
         <MetricCard
           title="Underwriting Profit"
-          value={analytics ? `$${(analytics.underwritingProfit / 1000000).toFixed(0)}M` : '$1,362M'}
+          value={
+            analytics
+              ? `$${(analytics.underwritingProfit / 1000000).toFixed(0)}M`
+              : "$1,362M"
+          }
           subtitle="Operating RoE: 14.8%"
-          trend={{ value: '+12.5%', isPositive: true }}
+          trend={{ value: "+12.5%", isPositive: true }}
           icon={ShieldCheck}
           color="indigo"
         />
 
         <MetricCard
           title="Solvency II Coverage"
-          value={analytics ? `${analytics.solvencyCoverageRatio}%` : '268.5%'}
-          subtitle={`Capital Surplus: $${analytics ? (analytics.capitalSurplus / 1000000000).toFixed(1) : '18.9'}B`}
-          trend={{ value: 'Robust', isPositive: true }}
+          value={analytics ? `${analytics.solvencyCoverageRatio}%` : "268.5%"}
+          subtitle={`Capital Surplus: $${analytics ? (analytics.capitalSurplus / 1000000000).toFixed(1) : "18.9"}B`}
+          trend={{ value: "Robust", isPositive: true }}
           icon={CheckCircle2}
           color="amber"
         />
@@ -153,7 +166,9 @@ export const DashboardPage = () => {
                 <FileCheck2 className="w-5 h-5 text-blue-600" />
                 <span>Active Treaties & Facultative Commitments</span>
               </h2>
-              <p className="text-xs text-slate-500">Live treaties bound or undergoing actuarial underwriting review</p>
+              <p className="text-xs text-slate-500">
+                Live treaties bound or undergoing actuarial underwriting review
+              </p>
             </div>
             <Link
               to="/treaties"
@@ -180,13 +195,19 @@ export const DashboardPage = () => {
                 {treaties.slice(0, 5).map((t) => (
                   <tr key={t.id} className="hover:bg-slate-50/80 transition">
                     <td className="py-3 px-3">
-                      <div className="font-semibold text-slate-900">{t.treatyCode}</div>
-                      <div className="text-[11px] text-slate-500 truncate max-w-xs">{t.treatyName}</div>
+                      <div className="font-semibold text-slate-900">
+                        {t.treatyCode}
+                      </div>
+                      <div className="text-[11px] text-slate-500 truncate max-w-xs">
+                        {t.treatyName}
+                      </div>
                     </td>
-                    <td className="py-3 px-3 font-medium text-slate-800">{t.cedentName}</td>
+                    <td className="py-3 px-3 font-medium text-slate-800">
+                      {t.cedentName}
+                    </td>
                     <td className="py-3 px-3">
                       <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-medium text-[10px]">
-                        {t.treatyType.replace('_', ' ')}
+                        {t.treatyType.replace("_", " ")}
                       </span>
                     </td>
                     <td className="py-3 px-3 text-right font-semibold text-slate-900">
@@ -198,16 +219,16 @@ export const DashboardPage = () => {
                     <td className="py-3 px-3 text-center">
                       <span
                         className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
-                          t.status === 'BOUND'
-                            ? 'bg-emerald-100 text-emerald-800'
-                            : t.status === 'APPROVED'
-                            ? 'bg-blue-100 text-blue-800'
-                            : t.status === 'UNDER_REVIEW'
-                            ? 'bg-amber-100 text-amber-800'
-                            : 'bg-slate-100 text-slate-700'
+                          t.status === "BOUND"
+                            ? "bg-emerald-100 text-emerald-800"
+                            : t.status === "APPROVED"
+                              ? "bg-blue-100 text-blue-800"
+                              : t.status === "UNDER_REVIEW"
+                                ? "bg-amber-100 text-amber-800"
+                                : "bg-slate-100 text-slate-700"
                         }`}
                       >
-                        {t.status.replace('_', ' ')}
+                        {t.status.replace("_", " ")}
                       </span>
                     </td>
                   </tr>
@@ -226,32 +247,44 @@ export const DashboardPage = () => {
                 <AlertTriangle className="w-4 h-4 text-rose-600" />
                 <span>Recent Ceded Loss Notices</span>
               </h2>
-              <Link to="/claims" className="text-xs text-blue-600 hover:underline font-medium">
+              <Link
+                to="/claims"
+                className="text-xs text-blue-600 hover:underline font-medium"
+              >
                 Details &rarr;
               </Link>
             </div>
 
             <div className="space-y-3">
               {claims.slice(0, 3).map((c) => (
-                <div key={c.id} className="p-3 bg-slate-50 rounded-xl border border-slate-200/60">
+                <div
+                  key={c.id}
+                  className="p-3 bg-slate-50 rounded-xl border border-slate-200/60"
+                >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-bold text-xs text-slate-900">{c.claimNumber}</span>
+                    <span className="font-bold text-xs text-slate-900">
+                      {c.claimNumber}
+                    </span>
                     <span
                       className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                        c.status === 'SETTLED'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : c.status === 'APPROVED'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-rose-100 text-rose-800'
+                        c.status === "SETTLED"
+                          ? "bg-emerald-100 text-emerald-800"
+                          : c.status === "APPROVED"
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-rose-100 text-rose-800"
                       }`}
                     >
                       {c.status}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-600 line-clamp-1 mb-1.5">{c.eventDescription}</p>
+                  <p className="text-xs text-slate-600 line-clamp-1 mb-1.5">
+                    {c.eventDescription}
+                  </p>
                   <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
                     <span>Cedent: {c.cedentName}</span>
-                    <span className="font-bold text-rose-600">${(c.reinsuranceCededAmount / 1000000).toFixed(2)}M</span>
+                    <span className="font-bold text-rose-600">
+                      ${(c.reinsuranceCededAmount / 1000000).toFixed(2)}M
+                    </span>
                   </div>
                 </div>
               ))}

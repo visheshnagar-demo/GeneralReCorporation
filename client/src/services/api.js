@@ -1,19 +1,25 @@
-import axios from 'axios';
-import { initialTreaties, initialClaims, initialCedents, initialCatEvents, initialAnalytics } from '../data/mockData';
+import axios from "axios";
+import {
+  initialTreaties,
+  initialClaims,
+  initialCedents,
+  initialCatEvents,
+  initialAnalytics,
+} from "../data/mockData";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 const client = axios.create({
   baseURL: BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   timeout: 10000,
 });
 
 // Attach JWT token if present
 client.interceptors.request.use((config) => {
-  const token = localStorage.getItem('genre_auth_token');
+  const token = localStorage.getItem("genre_auth_token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -34,40 +40,45 @@ export const api = {
   // Auth
   login: async (credentials) => {
     try {
-      const response = await client.post('/api/v1/auth/login', credentials);
+      const response = await client.post("/api/v1/auth/login", credentials);
       if (response.data?.token) {
-        localStorage.setItem('genre_auth_token', response.data.token);
+        localStorage.setItem("genre_auth_token", response.data.token);
       }
       return response.data;
     } catch {
       // Offline fallback
-      if (credentials.email === 'test@example.com' || credentials.email === 'admin@example.com') {
-        const dummyToken = 'mock-jwt-token-genre-2026';
-        localStorage.setItem('genre_auth_token', dummyToken);
+      if (
+        credentials.email === "test@example.com" ||
+        credentials.email === "admin@example.com"
+      ) {
+        const dummyToken = "mock-jwt-token-genre-2026";
+        localStorage.setItem("genre_auth_token", dummyToken);
         return {
           token: dummyToken,
           user: {
-            id: 'usr-1',
+            id: "usr-1",
             email: credentials.email,
-            name: credentials.email.includes('admin') ? 'Senior Underwriter (Admin)' : 'Reinsurance Underwriter',
-            role: credentials.email.includes('admin') ? 'ADMIN' : 'UNDERWRITER',
+            name: credentials.email.includes("admin")
+              ? "Senior Underwriter (Admin)"
+              : "Reinsurance Underwriter",
+            role: credentials.email.includes("admin") ? "ADMIN" : "UNDERWRITER",
           },
         };
       }
-      throw new Error('Invalid email or password');
+      throw new Error("Invalid email or password");
     }
   },
 
   getCurrentUser: async () => {
     try {
-      const response = await client.get('/api/v1/auth/me');
+      const response = await client.get("/api/v1/auth/me");
       return response.data;
     } catch {
       return {
-        id: 'usr-1',
-        email: 'test@example.com',
-        name: 'Reinsurance Underwriter',
-        role: 'UNDERWRITER',
+        id: "usr-1",
+        email: "test@example.com",
+        name: "Reinsurance Underwriter",
+        role: "UNDERWRITER",
       };
     }
   },
@@ -75,7 +86,7 @@ export const api = {
   // Analytics & Dashboard Summary
   getAnalyticsSummary: async () => {
     try {
-      const res = await client.get('/api/v1/analytics/summary');
+      const res = await client.get("/api/v1/analytics/summary");
       return res.data;
     } catch {
       return inMemoryStore.analytics;
@@ -85,22 +96,25 @@ export const api = {
   // Treaties & Facultative Policies
   getTreaties: async (filters = {}) => {
     try {
-      const res = await client.get('/api/v1/treaties', { params: filters });
+      const res = await client.get("/api/v1/treaties", { params: filters });
       return res.data;
     } catch {
       let filtered = [...inMemoryStore.treaties];
-      if (filters.status && filters.status !== 'ALL') {
+      if (filters.status && filters.status !== "ALL") {
         filtered = filtered.filter((t) => t.status === filters.status);
       }
-      if (filters.lineOfBusiness && filters.lineOfBusiness !== 'ALL') {
-        filtered = filtered.filter((t) => t.lineOfBusiness === filters.lineOfBusiness);
+      if (filters.lineOfBusiness && filters.lineOfBusiness !== "ALL") {
+        filtered = filtered.filter(
+          (t) => t.lineOfBusiness === filters.lineOfBusiness,
+        );
       }
       if (filters.search) {
         const q = filters.search.toLowerCase();
-        filtered = filtered.filter((t) =>
-          t.treatyName.toLowerCase().includes(q) ||
-          t.treatyCode.toLowerCase().includes(q) ||
-          t.cedentName.toLowerCase().includes(q)
+        filtered = filtered.filter(
+          (t) =>
+            t.treatyName.toLowerCase().includes(q) ||
+            t.treatyCode.toLowerCase().includes(q) ||
+            t.cedentName.toLowerCase().includes(q),
         );
       }
       return filtered;
@@ -113,14 +127,14 @@ export const api = {
       return res.data;
     } catch {
       const found = inMemoryStore.treaties.find((t) => t.id === id);
-      if (!found) throw new Error('Treaty not found');
+      if (!found) throw new Error("Treaty not found");
       return found;
     }
   },
 
   createTreaty: async (treatyData) => {
     try {
-      const res = await client.post('/api/v1/treaties', treatyData);
+      const res = await client.post("/api/v1/treaties", treatyData);
       return res.data;
     } catch {
       const newTreaty = {
@@ -135,9 +149,12 @@ export const api = {
     }
   },
 
-  updateTreatyStatus: async (id, status, notes = '') => {
+  updateTreatyStatus: async (id, status, notes = "") => {
     try {
-      const res = await client.patch(`/api/v1/treaties/${id}/status`, { status, notes });
+      const res = await client.patch(`/api/v1/treaties/${id}/status`, {
+        status,
+        notes,
+      });
       return res.data;
     } catch {
       const idx = inMemoryStore.treaties.findIndex((t) => t.id === id);
@@ -145,31 +162,33 @@ export const api = {
         inMemoryStore.treaties[idx] = {
           ...inMemoryStore.treaties[idx],
           status,
-          underwriterNotes: notes || inMemoryStore.treaties[idx].underwriterNotes,
+          underwriterNotes:
+            notes || inMemoryStore.treaties[idx].underwriterNotes,
           updatedAt: new Date().toISOString(),
         };
         return inMemoryStore.treaties[idx];
       }
-      throw new Error('Treaty not found');
+      throw new Error("Treaty not found");
     }
   },
 
   // Claims
   getClaims: async (filters = {}) => {
     try {
-      const res = await client.get('/api/v1/claims', { params: filters });
+      const res = await client.get("/api/v1/claims", { params: filters });
       return res.data;
     } catch {
       let filtered = [...inMemoryStore.claims];
-      if (filters.status && filters.status !== 'ALL') {
+      if (filters.status && filters.status !== "ALL") {
         filtered = filtered.filter((c) => c.status === filters.status);
       }
       if (filters.search) {
         const q = filters.search.toLowerCase();
-        filtered = filtered.filter((c) =>
-          c.claimNumber.toLowerCase().includes(q) ||
-          c.cedentName.toLowerCase().includes(q) ||
-          c.eventDescription.toLowerCase().includes(q)
+        filtered = filtered.filter(
+          (c) =>
+            c.claimNumber.toLowerCase().includes(q) ||
+            c.cedentName.toLowerCase().includes(q) ||
+            c.eventDescription.toLowerCase().includes(q),
         );
       }
       return filtered;
@@ -178,13 +197,13 @@ export const api = {
 
   createClaim: async (claimData) => {
     try {
-      const res = await client.post('/api/v1/claims', claimData);
+      const res = await client.post("/api/v1/claims", claimData);
       return res.data;
     } catch {
       const newClaim = {
         id: `clm-${Date.now()}`,
         claimNumber: `CLM-${Math.floor(10000 + Math.random() * 90000)}`,
-        reportedDate: new Date().toISOString().split('T')[0],
+        reportedDate: new Date().toISOString().split("T")[0],
         ...claimData,
       };
       inMemoryStore.claims.unshift(newClaim);
@@ -192,9 +211,12 @@ export const api = {
     }
   },
 
-  updateClaimStatus: async (id, status, notes = '') => {
+  updateClaimStatus: async (id, status, notes = "") => {
     try {
-      const res = await client.patch(`/api/v1/claims/${id}/status`, { status, notes });
+      const res = await client.patch(`/api/v1/claims/${id}/status`, {
+        status,
+        notes,
+      });
       return res.data;
     } catch {
       const idx = inMemoryStore.claims.findIndex((c) => c.id === id);
@@ -206,14 +228,14 @@ export const api = {
         };
         return inMemoryStore.claims[idx];
       }
-      throw new Error('Claim not found');
+      throw new Error("Claim not found");
     }
   },
 
   // Cedents
   getCedents: async () => {
     try {
-      const res = await client.get('/api/v1/cedents');
+      const res = await client.get("/api/v1/cedents");
       return res.data;
     } catch {
       return inMemoryStore.cedents;
@@ -223,7 +245,7 @@ export const api = {
   // CAT Exposure
   getCatEvents: async () => {
     try {
-      const res = await client.get('/api/v1/cat-events');
+      const res = await client.get("/api/v1/cat-events");
       return res.data;
     } catch {
       return inMemoryStore.catEvents;
@@ -233,20 +255,31 @@ export const api = {
   // Risk Pricing Calculation
   calculatePricing: async (payload) => {
     try {
-      const res = await client.post('/api/v1/pricing/calculate', payload);
+      const res = await client.post("/api/v1/pricing/calculate", payload);
       return res.data;
     } catch {
       // Local mathematical actuarial calculation
-      const { limit = 10000000, attachmentPoint = 2000000, expectedLossRate = 0.035, expenseLoadRatio = 0.12, profitMargin = 0.08, catRiskLoad = 0.04 } = payload;
-      const layerCapacity = limit - attachmentPoint > 0 ? limit - attachmentPoint : limit;
-      const expectedLoss = layerCapacity * (parseFloat(expectedLossRate) || 0.035);
+      const {
+        limit = 10000000,
+        attachmentPoint = 2000000,
+        expectedLossRate = 0.035,
+        expenseLoadRatio = 0.12,
+        profitMargin = 0.08,
+        catRiskLoad = 0.04,
+      } = payload;
+      const layerCapacity =
+        limit - attachmentPoint > 0 ? limit - attachmentPoint : limit;
+      const expectedLoss =
+        layerCapacity * (parseFloat(expectedLossRate) || 0.035);
       const purePremium = expectedLoss;
       const riskLoad = purePremium * (parseFloat(catRiskLoad) || 0.04);
       const expenseLoad = purePremium * (parseFloat(expenseLoadRatio) || 0.12);
       const targetMargin = purePremium * (parseFloat(profitMargin) || 0.08);
-      const technicalPremium = purePremium + riskLoad + expenseLoad + targetMargin;
+      const technicalPremium =
+        purePremium + riskLoad + expenseLoad + targetMargin;
       const rateOnLine = (technicalPremium / layerCapacity) * 100;
-      const estimatedCombinedRatio = ((purePremium + expenseLoad) / technicalPremium) * 100;
+      const estimatedCombinedRatio =
+        ((purePremium + expenseLoad) / technicalPremium) * 100;
 
       return {
         layerCapacity,

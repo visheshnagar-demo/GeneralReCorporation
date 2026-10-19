@@ -1,30 +1,30 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
-import DashboardPage from './pages/DashboardPage';
-import TreatiesPage from './pages/TreatiesPage';
-import UnderwritingWorkbenchPage from './pages/UnderwritingWorkbenchPage';
-import ClaimsPage from './pages/ClaimsPage';
-import CatExposurePage from './pages/CatExposurePage';
-import CedentsPage from './pages/CedentsPage';
-import AnalyticsPage from './pages/AnalyticsPage';
-import { useState } from 'react';
-import { Shield, Lock, Mail } from 'lucide-react';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
+import DashboardPage from "./pages/DashboardPage";
+import TreatiesPage from "./pages/TreatiesPage";
+import UnderwritingWorkbenchPage from "./pages/UnderwritingWorkbenchPage";
+import ClaimsPage from "./pages/ClaimsPage";
+import CatExposurePage from "./pages/CatExposurePage";
+import CedentsPage from "./pages/CedentsPage";
+import AnalyticsPage from "./pages/AnalyticsPage";
+import { useState } from "react";
+import { Shield, Lock, Mail } from "lucide-react";
 
 const LoginView = () => {
   const { login, loading } = useAuth();
-  const [email, setEmail] = useState('test@example.com');
-  const [password, setPassword] = useState('testpassword');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("test@example.com");
+  const [password, setPassword] = useState("testpassword");
+  const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     try {
       await login(email, password);
     } catch (err) {
-      setError(err.message || 'Login failed');
+      setError(err.message || "Login failed");
     }
   };
 
@@ -35,8 +35,12 @@ const LoginView = () => {
           <div className="inline-flex p-3 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 mb-3">
             <Shield className="w-8 h-8" />
           </div>
-          <h2 className="text-xl font-bold tracking-tight">Gen Re Underwriting Portal</h2>
-          <p className="text-xs text-slate-400 mt-1">A Berkshire Hathaway Reinsurance Company</p>
+          <h2 className="text-xl font-bold tracking-tight">
+            Gen Re Underwriting Portal
+          </h2>
+          <p className="text-xs text-slate-400 mt-1">
+            A Berkshire Hathaway Reinsurance Company
+          </p>
         </div>
 
         {error && (
@@ -47,7 +51,9 @@ const LoginView = () => {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Email Address
+            </label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
               <input
@@ -61,7 +67,9 @@ const LoginView = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Password</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Password
+            </label>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
               <input
@@ -77,7 +85,14 @@ const LoginView = () => {
           <div className="p-3 bg-blue-900/30 border border-blue-700/40 rounded-lg text-xs text-blue-300">
             <p className="font-semibold">Test Credentials:</p>
             <p className="text-[11px] text-blue-200 mt-0.5">
-              Email: <code className="bg-blue-950 px-1 py-0.5 rounded">test@example.com</code> / Password: <code className="bg-blue-950 px-1 py-0.5 rounded">testpassword</code>
+              Email:{" "}
+              <code className="bg-blue-950 px-1 py-0.5 rounded">
+                test@example.com
+              </code>{" "}
+              / Password:{" "}
+              <code className="bg-blue-950 px-1 py-0.5 rounded">
+                testpassword
+              </code>
             </p>
           </div>
 
@@ -86,7 +101,7 @@ const LoginView = () => {
             disabled={loading}
             className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold text-sm transition shadow-lg shadow-blue-500/30 disabled:opacity-50"
           >
-            {loading ? 'Authenticating...' : 'Sign In to Portal'}
+            {loading ? "Authenticating..." : "Sign In to Portal"}
           </button>
         </form>
       </div>
@@ -110,7 +125,10 @@ const AppLayout = () => {
           <Routes>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/treaties" element={<TreatiesPage />} />
-            <Route path="/underwriting" element={<UnderwritingWorkbenchPage />} />
+            <Route
+              path="/underwriting"
+              element={<UnderwritingWorkbenchPage />}
+            />
             <Route path="/claims" element={<ClaimsPage />} />
             <Route path="/cat-exposure" element={<CatExposurePage />} />
             <Route path="/cedents" element={<CedentsPage />} />
