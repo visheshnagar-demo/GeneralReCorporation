@@ -42,6 +42,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def init_db():
     from server import models  # noqa: F401
+
     Base.metadata.create_all(bind=engine)
 
 
@@ -126,7 +127,9 @@ def seed_data(db):
     ]
 
     for c_data in carriers_to_seed:
-        existing_c = db.query(CarrierProfile).filter(CarrierProfile.id == c_data["id"]).first()
+        existing_c = (
+            db.query(CarrierProfile).filter(CarrierProfile.id == c_data["id"]).first()
+        )
         if not existing_c:
             carrier = CarrierProfile(
                 id=c_data["id"],

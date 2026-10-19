@@ -81,8 +81,12 @@ class FlagResolveRequest(BaseModel):
 class QuoteDecisionCreate(BaseModel):
     submission_id: str
     premium_amount: float = Field(..., gt=0, description="Binding quote premium in USD")
-    capacity_offered: float = Field(..., gt=0, description="Offered capacity limit in USD")
-    deductible_retention: float = Field(..., ge=0, description="Deductible / retention in USD")
+    capacity_offered: float = Field(
+        ..., gt=0, description="Offered capacity limit in USD"
+    )
+    deductible_retention: float = Field(
+        ..., ge=0, description="Deductible / retention in USD"
+    )
     subjectivities: Optional[str] = None
     expiration_date: Optional[str] = None
     underwriter_id: Optional[str] = "test@example.com"
@@ -91,7 +95,9 @@ class QuoteDecisionCreate(BaseModel):
 
 class DeclineDecisionCreate(BaseModel):
     submission_id: str
-    decline_reason_code: str = Field(..., min_length=1, description="Standardized declination code")
+    decline_reason_code: str = Field(
+        ..., min_length=1, description="Standardized declination code"
+    )
     underwriter_id: Optional[str] = "test@example.com"
     notes: Optional[str] = None
 
@@ -126,11 +132,11 @@ class SubmissionCreate(BaseModel):
     retention: float = Field(..., ge=0)
     effective_date: str = Field(..., min_length=1)
     expiry_date: str = Field(..., min_length=1)
-    
+
     # Loss history
     loss_history_count: Optional[int] = 0
     total_incurred_losses: Optional[float] = 0.0
-    
+
     # Risk factor attributes
     mfa_enforced: Optional[bool] = True
     prior_breach_history: Optional[bool] = False
@@ -188,7 +194,7 @@ class SubmissionResponse(ORMBase):
     notes: Optional[str] = None
     created_at: datetime
     updated_at: datetime
-    
+
     carrier: Optional[CarrierProfileResponse] = None
     documents: List[DocumentResponse] = []
     missing_info_flags: List[MissingInfoFlagResponse] = []

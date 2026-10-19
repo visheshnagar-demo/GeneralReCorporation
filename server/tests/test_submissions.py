@@ -165,12 +165,15 @@ def test_carrier_endpoints(client):
     assert get_resp.status_code == 200
     assert len(get_resp.json()) >= 3
 
-    post_resp = client.post("/api/v1/carriers", json={
-        "name": "Liberty Mutual Treaty",
-        "rating": "A+",
-        "contact_email": "facultative@libertymutual.com",
-        "phone": "+1-800-555-9988",
-        "headquarters": "Boston, MA",
-    })
+    post_resp = client.post(
+        "/api/v1/carriers",
+        json={
+            "name": "Liberty Mutual Treaty",
+            "rating": "A+",
+            "contact_email": "facultative@libertymutual.com",
+            "phone": "+1-800-555-9988",
+            "headquarters": "Boston, MA",
+        },
+    )
     assert post_resp.status_code == 201
     assert post_resp.json()["name"] == "Liberty Mutual Treaty"

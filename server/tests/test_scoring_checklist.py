@@ -1,6 +1,6 @@
 from server.services.scoring_engine import calculate_risk_score
 from server.services.checklist_service import evaluate_and_sync_checklist
-from server.models import ReinsuranceSubmission, SubmissionDocument
+from server.models import ReinsuranceSubmission
 
 
 def test_cyber_scoring_clean_vs_adverse():
@@ -16,7 +16,9 @@ def test_cyber_scoring_clean_vs_adverse():
         "security_audit_score": 95,
         "industry_sector": "Consumer Goods",
     }
-    score_clean, tier_clean, factors_clean, exp_clean = calculate_risk_score(clean_cyber)
+    score_clean, tier_clean, factors_clean, exp_clean = calculate_risk_score(
+        clean_cyber
+    )
     assert score_clean <= 40
     assert tier_clean == "LOW"
 
@@ -88,9 +90,10 @@ def test_checklist_missing_docs_evaluation():
 
     # In-memory mock evaluation without database commit
     from unittest.mock import MagicMock
+
     mock_db = MagicMock()
     flags = evaluate_and_sync_checklist(mock_db, submission)
-    
+
     flag_names = [f.field_or_doc_name for f in flags]
     assert "Security Audit Report" in flag_names
     assert "Cyber Assessment Questionnaire" in flag_names

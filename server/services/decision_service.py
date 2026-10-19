@@ -7,9 +7,11 @@ from server.schemas import QuoteDecisionCreate, DeclineDecisionCreate
 
 
 def record_quote(db: Session, quote_in: QuoteDecisionCreate) -> UnderwritingDecision:
-    submission = db.query(ReinsuranceSubmission).filter(
-        ReinsuranceSubmission.id == quote_in.submission_id
-    ).first()
+    submission = (
+        db.query(ReinsuranceSubmission)
+        .filter(ReinsuranceSubmission.id == quote_in.submission_id)
+        .first()
+    )
     if not submission:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -52,10 +54,14 @@ def record_quote(db: Session, quote_in: QuoteDecisionCreate) -> UnderwritingDeci
     return decision
 
 
-def record_decline(db: Session, decline_in: DeclineDecisionCreate) -> UnderwritingDecision:
-    submission = db.query(ReinsuranceSubmission).filter(
-        ReinsuranceSubmission.id == decline_in.submission_id
-    ).first()
+def record_decline(
+    db: Session, decline_in: DeclineDecisionCreate
+) -> UnderwritingDecision:
+    submission = (
+        db.query(ReinsuranceSubmission)
+        .filter(ReinsuranceSubmission.id == decline_in.submission_id)
+        .first()
+    )
     if not submission:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

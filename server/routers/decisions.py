@@ -13,7 +13,9 @@ from server.services.decision_service import record_quote, record_decline
 router = APIRouter(prefix="/api/v1/decisions", tags=["Quote & Decline Decisions"])
 
 
-@router.post("/quote", response_model=DecisionResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/quote", response_model=DecisionResponse, status_code=status.HTTP_201_CREATED
+)
 def submit_quote_decision(
     quote_in: QuoteDecisionCreate,
     db: Session = Depends(get_db),
@@ -21,7 +23,9 @@ def submit_quote_decision(
     return record_quote(db, quote_in)
 
 
-@router.post("/decline", response_model=DecisionResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/decline", response_model=DecisionResponse, status_code=status.HTTP_201_CREATED
+)
 def submit_decline_decision(
     decline_in: DeclineDecisionCreate,
     db: Session = Depends(get_db),
@@ -34,9 +38,11 @@ def get_submission_decisions(
     submission_id: str,
     db: Session = Depends(get_db),
 ):
-    submission = db.query(ReinsuranceSubmission).filter(
-        ReinsuranceSubmission.id == submission_id
-    ).first()
+    submission = (
+        db.query(ReinsuranceSubmission)
+        .filter(ReinsuranceSubmission.id == submission_id)
+        .first()
+    )
     if not submission:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

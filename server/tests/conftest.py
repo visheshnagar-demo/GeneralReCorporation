@@ -31,7 +31,7 @@ def _clean_and_seed_tables():
     with engine.begin() as conn:
         for table in reversed(Base.metadata.sorted_tables):
             conn.execute(table.delete())
-    
+
     db = TestingSessionLocal()
     try:
         seed_data(db)

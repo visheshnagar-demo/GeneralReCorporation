@@ -33,10 +33,20 @@ def list_carriers(
     limit: int = Query(100, ge=1, le=500),
     db: Session = Depends(get_db),
 ):
-    return db.query(CarrierProfile).order_by(CarrierProfile.name.asc()).offset(skip).limit(limit).all()
+    return (
+        db.query(CarrierProfile)
+        .order_by(CarrierProfile.name.asc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
 
 
-@router.post("/carriers", response_model=CarrierProfileResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/carriers",
+    response_model=CarrierProfileResponse,
+    status_code=status.HTTP_201_CREATED,
+)
 def create_carrier(
     carrier_in: CarrierProfileCreate,
     db: Session = Depends(get_db),
@@ -60,7 +70,11 @@ def create_carrier(
 # -------------------------------------------------------------
 # Submissions
 # -------------------------------------------------------------
-@router.post("/submissions", response_model=SubmissionResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/submissions",
+    response_model=SubmissionResponse,
+    status_code=status.HTTP_201_CREATED,
+)
 def create_submission(
     submission_in: SubmissionCreate,
     db: Session = Depends(get_db),
@@ -80,9 +94,17 @@ def create_submission(
     # Resolve Carrier
     carrier = None
     if submission_in.carrier_id:
-        carrier = db.query(CarrierProfile).filter(CarrierProfile.id == submission_in.carrier_id).first()
+        carrier = (
+            db.query(CarrierProfile)
+            .filter(CarrierProfile.id == submission_in.carrier_id)
+            .first()
+        )
     if not carrier and submission_in.carrier_name:
-        carrier = db.query(CarrierProfile).filter(CarrierProfile.name == submission_in.carrier_name).first()
+        carrier = (
+            db.query(CarrierProfile)
+            .filter(CarrierProfile.name == submission_in.carrier_name)
+            .first()
+        )
         if not carrier:
             carrier = CarrierProfile(
                 id=str(uuid.uuid4()),
@@ -108,20 +130,22 @@ def create_submission(
             db.refresh(carrier)
 
     # Calculate initial risk score & tier
-    score, tier, _, _ = calculate_risk_score({
-        "limit_requested": submission_in.limit_requested,
-        "attachment_point": submission_in.attachment_point,
-        "loss_history_count": submission_in.loss_history_count,
-        "total_incurred_losses": submission_in.total_incurred_losses,
-        "risk_type": normalized_risk_type,
-        "mfa_enforced": submission_in.mfa_enforced,
-        "prior_breach_history": submission_in.prior_breach_history,
-        "security_audit_score": submission_in.security_audit_score,
-        "audited_financials_available": submission_in.audited_financials_available,
-        "governance_rating": submission_in.governance_rating,
-        "financial_rating": submission_in.financial_rating,
-        "industry_sector": submission_in.industry_sector,
-    })
+    score, tier, _, _ = calculate_risk_score(
+        {
+            "limit_requested": submission_in.limit_requested,
+            "attachment_point": submission_in.attachment_point,
+            "loss_history_count": submission_in.loss_history_count,
+            "total_incurred_losses": submission_in.total_incurred_losses,
+            "risk_type": normalized_risk_type,
+            "mfa_enforced": submission_in.mfa_enforced,
+            "prior_breach_history": submission_in.prior_breach_history,
+            "security_audit_score": submission_in.security_audit_score,
+            "audited_financials_available": submission_in.audited_financials_available,
+            "governance_rating": submission_in.governance_rating,
+            "financial_rating": submission_in.financial_rating,
+            "industry_sector": submission_in.industry_sector,
+        }
+    )
 
     sub_id = str(uuid.uuid4())
     submission = ReinsuranceSubmission(
@@ -203,7 +227,12 @@ def list_submissions(
     if status_filter:
         query = query.filter(ReinsuranceSubmission.status == status_filter.upper())
 
-    return query.order_by(ReinsuranceSubmission.created_at.desc()).offset(skip).limit(limit).all()
+    return (
+        query.order_by(ReinsuranceSubmission.created_at.desc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
 
 
 @router.get("/submissions/{submission_id}", response_model=SubmissionResponse)
@@ -252,20 +281,22 @@ def update_submission(
         setattr(submission, field, val)
 
     # Recompute risk score
-    score, tier, _, _ = calculate_risk_score({
-        "limit_requested": submission.limit_requested,
-        "attachment_point": submission.attachment_point,
-        "loss_history_count": submission.loss_history_count,
-        "total_incurred_losses": submission.total_incurred_losses,
-        "risk_type": submission.risk_type,
-        "mfa_enforced": submission.mfa_enforced,
-        "prior_breach_history": submission.prior_breach_history,
-        "security_audit_score": submission.security_audit_score,
-        "audited_financials_available": submission.audited_financials_available,
-        "governance_rating": submission.governance_rating,
-        "financial_rating": submission.financial_rating,
-        "industry_sector": submission.industry_sector,
-    })
+    score, tier, _, _ = calculate_risk_score(
+        {
+            "limit_requested": submission.limit_requested,
+            "attachment_point": submission.attachment_point,
+            "loss_history_count": submission.loss_history_count,
+            "total_incurred_losses": submission.total_incurred_losses,
+            "risk_type": submission.risk_type,
+            "mfa_enforced": submission.mfa_enforced,
+            "prior_breach_history": submission.prior_breach_history,
+            "security_audit_score": submission.security_audit_score,
+            "audited_financials_available": submission.audited_financials_available,
+            "governance_rating": submission.governance_rating,
+            "financial_rating": submission.financial_rating,
+            "industry_sector": submission.industry_sector,
+        }
+    )
     submission.risk_score = score
     submission.risk_tier = tier
     submission.updated_at = datetime.now(timezone.utc)
@@ -280,7 +311,11 @@ def update_submission(
 # -------------------------------------------------------------
 # Attachments
 # -------------------------------------------------------------
-@router.post("/submissions/{submission_id}/attachments", response_model=DocumentResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/submissions/{submission_id}/attachments",
+    response_model=DocumentResponse,
+    status_code=status.HTTP_201_CREATED,
+)
 def add_attachment(
     submission_id: str,
     doc_in: DocumentCreate,
@@ -317,7 +352,9 @@ def add_attachment(
     return doc
 
 
-@router.get("/submissions/{submission_id}/attachments", response_model=List[DocumentResponse])
+@router.get(
+    "/submissions/{submission_id}/attachments", response_model=List[DocumentResponse]
+)
 def list_attachments(
     submission_id: str,
     db: Session = Depends(get_db),
@@ -332,4 +369,8 @@ def list_attachments(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Reinsurance submission with ID '{submission_id}' not found.",
         )
-    return db.query(SubmissionDocument).filter(SubmissionDocument.submission_id == submission_id).all()
+    return (
+        db.query(SubmissionDocument)
+        .filter(SubmissionDocument.submission_id == submission_id)
+        .all()
+    )

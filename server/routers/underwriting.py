@@ -25,21 +25,27 @@ router = APIRouter(prefix="/api/v1/underwriting", tags=["Underwriting Queue & Tr
 @router.get("/kpis", response_model=UnderwritingKPIResponse)
 def get_underwriting_kpis(db: Session = Depends(get_db)):
     total_submissions = db.query(ReinsuranceSubmission).count()
-    active_requests = db.query(ReinsuranceSubmission).filter(
-        ReinsuranceSubmission.status.in_(["PENDING", "UNDER_REVIEW"])
-    ).count()
+    active_requests = (
+        db.query(ReinsuranceSubmission)
+        .filter(ReinsuranceSubmission.status.in_(["PENDING", "UNDER_REVIEW"]))
+        .count()
+    )
 
     avg_score_res = db.query(func.avg(ReinsuranceSubmission.risk_score)).scalar()
     avg_score = float(avg_score_res) if avg_score_res is not None else 0.0
 
-    unresolved_flags = db.query(MissingInfoFlag).filter(
-        MissingInfoFlag.is_resolved.is_(False)
-    ).count()
+    unresolved_flags = (
+        db.query(MissingInfoFlag).filter(MissingInfoFlag.is_resolved.is_(False)).count()
+    )
 
-    quoted_capacity_res = db.query(func.sum(UnderwritingDecision.capacity_offered)).filter(
-        UnderwritingDecision.decision_type == "QUOTE"
-    ).scalar()
-    quoted_capacity = float(quoted_capacity_res) if quoted_capacity_res is not None else 0.0
+    quoted_capacity_res = (
+        db.query(func.sum(UnderwritingDecision.capacity_offered))
+        .filter(UnderwritingDecision.decision_type == "QUOTE")
+        .scalar()
+    )
+    quoted_capacity = (
+        float(quoted_capacity_res) if quoted_capacity_res is not None else 0.0
+    )
 
     return UnderwritingKPIResponse(
         active_requests=active_requests,
@@ -58,7 +64,10 @@ def get_underwriting_queue(
     carrier_id: Optional[str] = None,
     min_score: Optional[int] = Query(None, ge=0, le=100),
     max_score: Optional[int] = Query(None, ge=0, le=100),
-    sort_by: Optional[str] = Query("risk_score_desc", description="risk_score_desc, risk_score_asc, created_at_desc, limit_desc"),
+    sort_by: Optional[str] = Query(
+        "risk_score_desc",
+        description="risk_score_desc, risk_score_asc, created_at_desc, limit_desc",
+    ),
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=500),
     db: Session = Depends(get_db),
@@ -80,10 +89,14 @@ def get_underwriting_queue(
             query = query.filter(ReinsuranceSubmission.risk_type == rt)
 
     if status_filter:
-        query = query.filter(ReinsuranceSubmission.status == status_filter.strip().upper())
+        query = query.filter(
+            ReinsuranceSubmission.status == status_filter.strip().upper()
+        )
 
     if risk_tier:
-        query = query.filter(ReinsuranceSubmission.risk_tier == risk_tier.strip().upper())
+        query = query.filter(
+            ReinsuranceSubmission.risk_tier == risk_tier.strip().upper()
+        )
 
     if carrier_id:
         query = query.filter(ReinsuranceSubmission.carrier_id == carrier_id)
@@ -111,29 +124,33 @@ def get_score_breakdown(
     submission_id: str,
     db: Session = Depends(get_db),
 ):
-    submission = db.query(ReinsuranceSubmission).filter(
-        ReinsuranceSubmission.id == submission_id
-    ).first()
+    submission = (
+        db.query(ReinsuranceSubmission)
+        .filter(ReinsuranceSubmission.id == submission_id)
+        .first()
+    )
     if not submission:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Reinsurance submission with ID '{submission_id}' not found.",
         )
 
-    score, tier, factors, explanation = calculate_risk_score({
-        "limit_requested": submission.limit_requested,
-        "attachment_point": submission.attachment_point,
-        "loss_history_count": submission.loss_history_count,
-        "total_incurred_losses": submission.total_incurred_losses,
-        "risk_type": submission.risk_type,
-        "mfa_enforced": submission.mfa_enforced,
-        "prior_breach_history": submission.prior_breach_history,
-        "security_audit_score": submission.security_audit_score,
-        "audited_financials_available": submission.audited_financials_available,
-        "governance_rating": submission.governance_rating,
-        "financial_rating": submission.financial_rating,
-        "industry_sector": submission.industry_sector,
-    })
+    score, tier, factors, explanation = calculate_risk_score(
+        {
+            "limit_requested": submission.limit_requested,
+            "attachment_point": submission.attachment_point,
+            "loss_history_count": submission.loss_history_count,
+            "total_incurred_losses": submission.total_incurred_losses,
+            "risk_type": submission.risk_type,
+            "mfa_enforced": submission.mfa_enforced,
+            "prior_breach_history": submission.prior_breach_history,
+            "security_audit_score": submission.security_audit_score,
+            "audited_financials_available": submission.audited_financials_available,
+            "governance_rating": submission.governance_rating,
+            "financial_rating": submission.financial_rating,
+            "industry_sector": submission.industry_sector,
+        }
+    )
 
     return ScoreBreakdownResponse(
         submission_id=submission.id,
@@ -179,17 +196,24 @@ def get_submission_checklist(
     )
 
 
-@router.post("/{submission_id}/checklist/{flag_id}/resolve", response_model=MissingInfoFlagResponse)
+@router.post(
+    "/{submission_id}/checklist/{flag_id}/resolve",
+    response_model=MissingInfoFlagResponse,
+)
 def resolve_checklist_flag(
     submission_id: str,
     flag_id: str,
     resolve_in: Optional[FlagResolveRequest] = None,
     db: Session = Depends(get_db),
 ):
-    flag = db.query(MissingInfoFlag).filter(
-        MissingInfoFlag.id == flag_id,
-        MissingInfoFlag.submission_id == submission_id,
-    ).first()
+    flag = (
+        db.query(MissingInfoFlag)
+        .filter(
+            MissingInfoFlag.id == flag_id,
+            MissingInfoFlag.submission_id == submission_id,
+        )
+        .first()
+    )
     if not flag:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

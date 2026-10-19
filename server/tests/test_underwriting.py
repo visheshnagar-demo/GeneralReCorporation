@@ -31,7 +31,9 @@ def test_get_score_breakdown(client):
 
 def test_get_score_breakdown_not_found(client):
     # AC: Automated Risk Scoring Engine - 404 for unknown submission
-    response = client.get("/api/v1/underwriting/00000000-0000-0000-0000-000000000000/score-breakdown")
+    response = client.get(
+        "/api/v1/underwriting/00000000-0000-0000-0000-000000000000/score-breakdown"
+    )
     assert response.status_code == 404
 
 
